@@ -3,6 +3,12 @@
 //https://lastminuteengineers.com/rotary-encoder-arduino-tutorial/
 //https://learn.adafruit.com/adafruit-rotary-trinkey/arduino-examples
 
+//STARTUP:
+//Download Arduino
+//Go to File > Prefrences > Additional boards manager URLs and put in "http://arduino.esp8266.com/stable/package_esp8266com_index.json"
+//Install the ESP8266 board module
+//Install the following Libraries "Encoder" by Paul Stoffregen, "RotaryEncoder" by Matthias Hertel
+
 #include <RotaryEncoder.h>
 
 #define PIN_ENCODER_A 1
