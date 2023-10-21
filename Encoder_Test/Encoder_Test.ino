@@ -38,9 +38,11 @@ void loop() {
   int curr_rotary = encoder->getPosition();
   RotaryEncoder::Direction direction = encoder->getDirection();
   if (curr_rotary != last_rotary) {
-    Serial.print("Encoder value: ");
+    Serial.print("Time: ");
+    Serial.print(millis());
+    Serial.print(" | Encoder value: ");
     Serial.print(curr_rotary);
-    Serial.print(" direction: ");
+    Serial.print(" | direction: ");
     Serial.println((int)direction);
   }
   last_rotary = curr_rotary;
