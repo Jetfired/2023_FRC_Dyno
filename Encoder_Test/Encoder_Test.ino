@@ -9,41 +9,66 @@
 //Install the ESP8266 board module
 //Install the following Libraries "Encoder" by Paul Stoffregen, "RotaryEncoder" by Matthias Hertel, and "HID-Project" by NicoHood
 
-//Ensure the pins are correct (pin locations are D1 and D2)
+//Ensure the pins are correct (encoder pin pairs: [D1, D2], [D5, D6])
 
 #include <RotaryEncoder.h>
 
-#define PIN_ENCODER_A 4
-#define PIN_ENCODER_B 5
+#define PIN_ENCODER_A1 4
+#define PIN_ENCODER_B1 5
+#define PIN_ENCODER_A2 12
+#define PIN_ENCODER_B2 14
 
-RotaryEncoder *encoder = nullptr;
+RotaryEncoder *encoder1 = nullptr;
+RotaryEncoder *encoder2 = nullptr;
 
-IRAM_ATTR void checkPosition() {
-  encoder->tick();
+IRAM_ATTR void checkPosition1() {
+  encoder1->tick();
+}
+IRAM_ATTR void checkPosition2() {
+  encoder2->tick();
 }
 
-int last_rotary = 0;
+int last_rotary1 = 0;
+int last_rotary2 = 0;
 
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
-  encoder = new RotaryEncoder(PIN_ENCODER_A, PIN_ENCODER_B, RotaryEncoder::LatchMode::TWO03);
-  attachInterrupt(digitalPinToInterrupt(PIN_ENCODER_A), checkPosition, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(PIN_ENCODER_B), checkPosition, CHANGE);
+  encoder1 = new RotaryEncoder(PIN_ENCODER_A1, PIN_ENCODER_B1, RotaryEncoder::LatchMode::TWO03);
+  attachInterrupt(digitalPinToInterrupt(PIN_ENCODER_A1), checkPosition1, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(PIN_ENCODER_B1), checkPosition1, CHANGE);
+
+  encoder2 = new RotaryEncoder(PIN_ENCODER_A2, PIN_ENCODER_B2, RotaryEncoder::LatchMode::TWO03);
+  attachInterrupt(digitalPinToInterrupt(PIN_ENCODER_A2), checkPosition2, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(PIN_ENCODER_B2), checkPosition2, CHANGE);
 }
 
 void loop() {
-  encoder->tick();
+  encoder1->tick();
   // put your main code here, to run repeatedly:
-  int curr_rotary = encoder->getPosition();
-  RotaryEncoder::Direction direction = encoder->getDirection();
-  if (curr_rotary != last_rotary) {
-    Serial.print("Time: ");
+  int curr_rotary1 = encoder1->getPosition();
+  RotaryEncoder::Direction direction1 = encoder1->getDirection();
+  if (curr_rotary1 != last_rotary1) {
+    Serial.print("ENCODER 1  |  Time: ");
     Serial.print(millis());
     Serial.print(" | Encoder value: ");
-    Serial.print(curr_rotary);
+    Serial.print(curr_rotary1);
     Serial.print(" | direction: ");
-    Serial.println((int)direction);
+    Serial.println((int)direction1);
   }
-  last_rotary = curr_rotary;
+  last_rotary1 = curr_rotary1;
+
+  encoder2->tick();
+  // put your main code here, to run repeatedly:
+  int curr_rotary2 = encoder2->getPosition();
+  RotaryEncoder::Direction direction2 = encoder2->getDirection();
+  if (curr_rotary2 != last_rotary2) {
+    Serial.print("ENCODER 2  | Time: ");
+    Serial.print(millis());
+    Serial.print(" | Encoder value: ");
+    Serial.print(curr_rotary2);
+    Serial.print(" | direction: ");
+    Serial.println((int)direction2);
+  }
+  last_rotary2 = curr_rotary2;
 }
