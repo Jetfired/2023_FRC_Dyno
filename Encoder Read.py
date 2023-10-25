@@ -2,9 +2,10 @@ import serial
 import time
 import pandas as pd
 
-serialPort = serial.Serial(
-    port="COM3", baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE
-)
+serialPort = serial.Serial(port="COM3", baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
+
+if not serialPort.isOpen():
+    serialPort.open()
 
 serialString = ""  # Used to hold data coming over UART
 encoderOutput = {
@@ -13,7 +14,8 @@ encoderOutput = {
     "Encoder Value": [],
 }
     
-while 1:
+while True:
+    print("start")
     # Wait until there is data waiting in the serial buffer
     if serialPort.in_waiting > 0:
 
@@ -33,6 +35,7 @@ while 1:
             encoderOutput["Encoder Value"].append(encoderValue)
         except:
             pass
+    print("end")
             
 data = pd.DataFrame(encoderOutput)
 print(data)
