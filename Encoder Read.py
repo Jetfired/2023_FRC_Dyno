@@ -41,3 +41,4 @@ while (float(time.time()) - start_time) < 5.0:
 print(encoderOutput)           
 data = pd.DataFrame(encoderOutput)
 print(data)
+data.to_excel("data.xlsx", index=False, freeze_panes=[1, 0])
